@@ -1,14 +1,32 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      手机屏保
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <ion-item>
+    <ion-label floating>
+      <ion-icon name="timer" item-start class="text-primary"></ion-icon>
+      提醒时间间隔设置（分钟）
+    </ion-label>
+    <!--  okText="确定" cancelText="取消"-->
+    <ion-select name="timeInterval" required [(ngModel)]="timeInterval" #priceUnit="ngModel" interface="popover">
+      <!-- okText="Okay" cancelText="Dismiss" -->
+      <ion-option value="1">1</ion-option>
+      <ion-option value="15">15</ion-option>
+      <ion-option value="30" selected="true">30</ion-option>
+      <ion-option value="45">45</ion-option>
+      <ion-option value="60">60</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <button ion-button block round color="secondary" tappable (click)="save()">
+      <ion-icon name="checkbox"></ion-icon>
+      &nbsp;&nbsp;保存设置
+    </button>
+  </ion-item>
 </ion-content>
