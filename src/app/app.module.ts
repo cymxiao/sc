@@ -4,7 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Media } from '@ionic-native/media';
-
+import { LockScreenComponent,LockScreenModule } from  'ionic-simple-lockscreen';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 
@@ -15,14 +15,16 @@ import { HomePage } from '../pages/home/home';
   ],
   imports: [
     BrowserModule,
+    LockScreenModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    LockScreenComponent,
     HomePage
   ],
-  providers: [
+  providers: [ 
     StatusBar,
     SplashScreen,
     Media,

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController,Platform } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
 
+import { LockScreenComponent } from  'ionic-simple-lockscreen';
 import { Media, MediaObject } from '@ionic-native/media';
 
 @Component({
@@ -11,16 +12,19 @@ import { Media, MediaObject } from '@ionic-native/media';
 export class HomePage {
 
 
-  timeInterval: number;
+  timeInterval: number = 30;
   showAlert: boolean;
 
   constructor(public navCtrl: NavController,
+    private platform: Platform,
     private media: Media) {
-
+      console.dir(this.platform);
+       
   }
 
   save() {
     //timer(this.timeInterval*60*1000).subscribe(() => 
+   
     console.log(this.timeInterval);
     /*
       timer takes a second argument, how often to emit subsequent values
@@ -30,6 +34,7 @@ export class HomePage {
     timer(this.timeInterval * 1000,this.timeInterval * 1000).subscribe(() => {
       this.showAlert = false;
       this.playSound();
+      this.openLockscreen();
       //this.save();
     });
     
@@ -37,7 +42,10 @@ export class HomePage {
 
   playSound() {
     // Create a Media instance.  Expects path to file or url as argument
-    // We can optionally pass a second argument to track the status of the media
+    // We can optionally pass a second argument to track the status of the media 
+    if(this.platform && this.platform._platforms && this.platform._platforms.length > 0 &&  this.platform._platforms[0] ==='core'){  
+      return;
+    }
     const file: MediaObject = this.media.create('assets/alarm.mp3');
 
     // to listen to plugin events:
@@ -61,6 +69,21 @@ export class HomePage {
       //file.release();
     }
 
+  }
+
+  openLockscreen() {
+    //console.log('log screen start...');
+    this.navCtrl.push(LockScreenComponent,{
+      code:'1234',
+      ACDelbuttons:false,
+      passcodeLabel:'请输入密码',
+      onCorrect:function(){
+        console.log('输入正确!');
+      },
+      onWrong:function(attemptNumber){
+        console.log(attemptNumber + ' 错误密码输入次数(s)');
+      }
+    });
   }
 
 }
