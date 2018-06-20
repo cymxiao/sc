@@ -4,6 +4,7 @@ import { timer } from 'rxjs/observable/timer';
 
 import { LockScreenComponent } from  'ionic-simple-lockscreen';
 import { Media, MediaObject } from '@ionic-native/media';
+import { NativeAudio } from '@ionic-native/native-audio';
 
 @Component({
   selector: 'page-home',
@@ -17,6 +18,7 @@ export class HomePage {
 
   constructor(public navCtrl: NavController,
     private platform: Platform,
+    private nativeAudio: NativeAudio,
     private media: Media) {
       console.dir(this.platform);
        
@@ -70,6 +72,14 @@ export class HomePage {
     }
 
   }
+
+
+  // playAudio() {
+  //   this.nativeAudio.preloadSimple('uniqueId1', 'assets/alarm.mp3');//.then(onSuccess, onError);
+  //   //this.nativeAudio.preloadComplex('uniqueId2', 'path/to/file2.mp3', 1, 1, 0).then(onSuccess, onError);
+
+  //   this.nativeAudio.play('uniqueId1');//.then(onSuccess, onError);
+  // }
 
   openLockscreen() {
     //console.log('log screen start...');
