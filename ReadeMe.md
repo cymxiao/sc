@@ -1,3 +1,5 @@
+ionic cordova plugin add https://github.com/katzer/cordova-plugin-background-mode --nofetch
+
 Deploy: 
 ionic cordova platform remove android
 ionic cordova platform add android@6.4.0

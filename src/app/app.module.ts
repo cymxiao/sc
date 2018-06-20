@@ -7,6 +7,7 @@ import { Media } from '@ionic-native/media';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { NativeAudio } from '@ionic-native/native-audio';
 import { LockScreenComponent,LockScreenModule } from  'ionic-simple-lockscreen';
+//import { timer } from 'angular-timer';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 
@@ -32,6 +33,7 @@ import { HomePage } from '../pages/home/home';
     BackgroundMode,
     NativeAudio,
     Media,
+    //timer,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
