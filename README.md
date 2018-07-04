@@ -9,3 +9,12 @@ npm i ionic-simple-lockscreen
 
 $ ionic cordova plugin add cordova-plugin-nativeaudio
 $ npm install --save @ionic-native/native-audio
+
+
+
+ionic cordova platform add ios 
+ionic cordova platform add android 
+
+
+ionic cordova build ios --prod --release
+ionic cordova build android --prod --release

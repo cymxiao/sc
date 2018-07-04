@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController,Platform } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
 
-import { LockScreenComponent } from  'ionic-simple-lockscreen';
+import { BackgroundMode } from '@ionic-native/background-mode';
+import { LockScreenComponent } from 'ionic-simple-lockscreen';
 import { Media, MediaObject } from '@ionic-native/media';
 import { NativeAudio } from '@ionic-native/native-audio';
 
@@ -16,21 +17,33 @@ export class HomePage {
   timeInterval: number = 30;
   showAlert: boolean;
   startTime: Date = new Date();
-  minutes : number;
-  seconds : number;
+  minutes: number;
+  seconds: number;
   constructor(public navCtrl: NavController,
     private platform: Platform,
+    private bgMode: BackgroundMode,
     private nativeAudio: NativeAudio,
     private media: Media) {
-      console.dir(this.platform);
-       this.accurate_timer();
+    console.dir(this.platform);
+    if (!this.bgMode.isEnabled()) {
+      this.bgMode.enable();
+    }
+    if(!localStorage.getItem('startTime') ){
+      localStorage.setItem('startTime' ,  this.startTime.toString() );
+    }
+    this.accurate_timer();
   }
 
 
-  accurate_timer(){
+  accurate_timer() {
+    let startTime = new Date();
+    if(localStorage.getItem('startTime') !=null) {
+      startTime = new Date(localStorage.getItem('startTime'));
+    }
+
     timer(1000, 1000).subscribe(() => {
       const currentTime = new Date();
-      const timeDifference = currentTime.getTime() - this.startTime.getTime();
+      const timeDifference = currentTime.getTime() - startTime.getTime();
       const timeElapsed = Math.abs(timeDifference / 1000);
       //this.save();
       //Convert seconds into minutes and seconds
@@ -39,29 +52,29 @@ export class HomePage {
     });
     //const currentTime = new Date();
   }
-  
+
   save() {
     //timer(this.timeInterval*60*1000).subscribe(() => 
-   
+
     console.log(this.timeInterval);
     /*
       timer takes a second argument, how often to emit subsequent values
       in this case we will emit first value after param1 second and subsequent
       values every param2 seconds after
     */
-    timer(this.timeInterval * 1000,this.timeInterval * 1000).subscribe(() => {
+    timer(this.timeInterval * 1000, this.timeInterval * 1000).subscribe(() => {
       this.showAlert = false;
       this.playSound();
       this.openLockscreen();
       //this.save();
     });
-    
+
   }
 
   playSound() {
     // Create a Media instance.  Expects path to file or url as argument
     // We can optionally pass a second argument to track the status of the media 
-    if(this.platform && this.platform._platforms && this.platform._platforms.length > 0 &&  this.platform._platforms[0] ==='core'){  
+    if (this.platform && this.platform._platforms && this.platform._platforms.length > 0 && this.platform._platforms[0] === 'core') {
       return;
     }
     const file: MediaObject = this.media.create('assets/alarm.mp3');
@@ -71,7 +84,8 @@ export class HomePage {
     if (file) {
       //file.onStatusUpdate.subscribe(status => console.log(status)); // fires when file status changes
 
-      file.onSuccess.subscribe(() => {console.log('Action is successful');
+      file.onSuccess.subscribe(() => {
+        console.log('Action is successful');
         //this.save();
       });
 
@@ -99,14 +113,14 @@ export class HomePage {
 
   openLockscreen() {
     //console.log('log screen start...');
-    this.navCtrl.push(LockScreenComponent,{
-      code:'1234',
-      ACDelbuttons:false,
-      passcodeLabel:'请输入密码',
-      onCorrect:function(){
+    this.navCtrl.push(LockScreenComponent, {
+      code: '1234',
+      ACDelbuttons: false,
+      passcodeLabel: '请输入密码',
+      onCorrect: function () {
         console.log('输入正确!');
       },
-      onWrong:function(attemptNumber){
+      onWrong: function (attemptNumber) {
         console.log(attemptNumber + ' 错误密码输入次数(s)');
       }
     });
