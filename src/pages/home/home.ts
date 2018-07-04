@@ -15,15 +15,31 @@ export class HomePage {
 
   timeInterval: number = 30;
   showAlert: boolean;
-
+  startTime: Date = new Date();
+  minutes : number;
+  seconds : number;
   constructor(public navCtrl: NavController,
     private platform: Platform,
     private nativeAudio: NativeAudio,
     private media: Media) {
       console.dir(this.platform);
-       
+       this.accurate_timer();
   }
 
+
+  accurate_timer(){
+    timer(1000, 1000).subscribe(() => {
+      const currentTime = new Date();
+      const timeDifference = currentTime.getTime() - this.startTime.getTime();
+      const timeElapsed = Math.abs(timeDifference / 1000);
+      //this.save();
+      //Convert seconds into minutes and seconds
+      this.minutes = Math.floor(timeElapsed / 60);
+      this.seconds = Math.floor(timeElapsed) - (60 * this.minutes);
+    });
+    //const currentTime = new Date();
+  }
+  
   save() {
     //timer(this.timeInterval*60*1000).subscribe(() => 
    
