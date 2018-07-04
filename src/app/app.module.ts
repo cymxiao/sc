@@ -5,6 +5,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { Media  } from '@ionic-native/media'; 
+import { NativeAudio } from '@ionic-native/native-audio';
+import { LockScreenComponent,LockScreenModule } from  'ionic-simple-lockscreen';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -16,11 +18,13 @@ import { HomePage } from '../pages/home/home';
   ],
   imports: [
     BrowserModule,
+    LockScreenModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    LockScreenComponent,
     HomePage
   ],
   providers: [
@@ -28,6 +32,7 @@ import { HomePage } from '../pages/home/home';
     SplashScreen,
     BackgroundMode,
     Media,
+    NativeAudio,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
