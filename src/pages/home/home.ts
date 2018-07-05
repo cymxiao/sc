@@ -32,29 +32,32 @@ export class HomePage {
     private nativeAudio: NativeAudio,
     private media: Media) {
     //console.dir(this.platform);
-    // if (!this.bgMode.isEnabled()) {
-    //   this.bgMode.enable();
+    if (!this.bgMode.isEnabled()) {
+      this.bgMode.enable();
 
-    // }
+    }
     if (!localStorage.getItem('startTime')) {
       localStorage.setItem('startTime', this.startTime.toString());
     }
-    this.accurate_timer();
+    if (!localStorage.getItem('seconds')) {
+      localStorage.setItem('seconds', this.timeInit.toString());
+    }
+    this.startTimer();
+    this.save_timer_to_local();
   }
 
 
-  accurate_timer() {
-   
-
+  save_timer_to_local() { 
 
     if (this.platform && this.platform._platforms && this.platform._platforms[0] !== 'core') {
       this.bgMode.isScreenOff().then(isOff => {
-        this.isAndroidOff = isOff.toString() + 'haa';
+        //this.isAndroidOff = isOff.toString() + 'haa';
         if (isOff) {
+          localStorage.setItem('seconds', this.timeInit.toString());
           this.bgMode.disable();
         } else {
-          this.bgMode.enable();
-          this.startTimer();
+          //this.bgMode.enable();
+          this.isAndroidOff = isOff.toString() + 'haa';
         }
       });
     }
@@ -74,7 +77,7 @@ export class HomePage {
       //const timeElapsed = Math.abs(timeDifference / 1000);
       const timeElapsed = Math.abs(this.timeInit * 1000 / 1000);
       //console.log(timeElapsed);
-      //this.save();
+  
       //Convert seconds into minutes and seconds
       this.days = Math.floor(timeElapsed / (60 * 60 * 24));
       this.hours = Math.floor(timeElapsed / (60 * 60)) - 24 * this.days;
