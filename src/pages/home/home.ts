@@ -6,6 +6,7 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import { LockScreenComponent } from 'ionic-simple-lockscreen';
 import { Media, MediaObject } from '@ionic-native/media';
 import { NativeAudio } from '@ionic-native/native-audio';
+import { BoundElementPropertyAst } from '@angular/compiler';
 
 @Component({
   selector: 'page-home',
@@ -17,40 +18,69 @@ export class HomePage {
   timeInterval: number = 30;
   showAlert: boolean;
   startTime: Date = new Date();
+  days: number;
+  hours: number;
   minutes: number;
   seconds: number;
+
+  timeInit: number = 5;
+
+  isAndroidOff: string;
   constructor(public navCtrl: NavController,
     private platform: Platform,
     private bgMode: BackgroundMode,
     private nativeAudio: NativeAudio,
     private media: Media) {
-    console.dir(this.platform);
-    if (!this.bgMode.isEnabled()) {
-      this.bgMode.enable();
-    }
-    if(!localStorage.getItem('startTime') ){
-      localStorage.setItem('startTime' ,  this.startTime.toString() );
+    //console.dir(this.platform);
+    // if (!this.bgMode.isEnabled()) {
+    //   this.bgMode.enable();
+
+    // }
+    if (!localStorage.getItem('startTime')) {
+      localStorage.setItem('startTime', this.startTime.toString());
     }
     this.accurate_timer();
   }
 
 
   accurate_timer() {
+   
+
+
+    if (this.platform && this.platform._platforms && this.platform._platforms[0] !== 'core') {
+      this.bgMode.isScreenOff().then(isOff => {
+        this.isAndroidOff = isOff.toString() + 'haa';
+        if (isOff) {
+          this.bgMode.disable();
+        } else {
+          this.bgMode.enable();
+          this.startTimer();
+        }
+      });
+    }
+  }
+
+  startTimer(){
     let startTime = new Date();
-    if(localStorage.getItem('startTime') !=null) {
+    if (localStorage.getItem('startTime') != null) {
       startTime = new Date(localStorage.getItem('startTime'));
     }
-
     timer(1000, 1000).subscribe(() => {
       const currentTime = new Date();
       const timeDifference = currentTime.getTime() - startTime.getTime();
-      const timeElapsed = Math.abs(timeDifference / 1000);
+
+      this.timeInit = this.timeInit + 1;
+
+      //const timeElapsed = Math.abs(timeDifference / 1000);
+      const timeElapsed = Math.abs(this.timeInit * 1000 / 1000);
+      //console.log(timeElapsed);
       //this.save();
       //Convert seconds into minutes and seconds
-      this.minutes = Math.floor(timeElapsed / 60);
-      this.seconds = Math.floor(timeElapsed) - (60 * this.minutes);
+      this.days = Math.floor(timeElapsed / (60 * 60 * 24));
+      this.hours = Math.floor(timeElapsed / (60 * 60)) - 24 * this.days;
+      this.minutes = Math.floor(timeElapsed / 60) - 60 * this.hours;
+      this.seconds = Math.floor(timeElapsed) - (60 * 60 * this.hours) - (60 * this.minutes);
     });
-    //const currentTime = new Date();
   }
 
   save() {

@@ -18,3 +18,8 @@ ionic cordova platform add android
 
 ionic cordova build ios --prod --release
 ionic cordova build android --prod --release
+
+ionic cordova run ios --prod --release
+ionic cordova run android --prod --release
+
+ionic cordova run ios --prod --release
