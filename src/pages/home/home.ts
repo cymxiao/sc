@@ -149,7 +149,7 @@ export class HomePage {
       this.navCtrl.push(LockScreenComponent, {
         code: '1234',
         ACDelbuttons: false,
-        passcodeLabel: '请输入密码',
+        passcodeLabel: '请输入 1234 解锁',
         onCorrect: function () {
           console.log('输入正确!');
         },

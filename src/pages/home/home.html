@@ -1,37 +1,37 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      戒手机
-    </ion-title>
-  </ion-navbar>
+
 </ion-header>
 
-<ion-content padding>
-  <div>你已经使用手机  {{days}} 日 {{hours}} 时  {{minutes}} 分 {{seconds}} 秒 </div>
+<ion-content padding class="auth-page">
+  <div class="login-content">
+    <div class="divRound" text-center>
+      <p>你已经使用手机</p>
+      <p>{{days}} 日 {{hours}} 时 {{minutes}} 分 {{seconds}} 秒 </p>
 
-  <div> 累计使用次数：{{openTimes}}</div>
-  <ion-item>
-    <ion-label floating>
+      <div> 累计使用次数：{{openTimes}}</div>
+    </div>
+    <ion-item>
+      <ion-label floating>
         <ion-icon name="timer" item-start class="text-primary"></ion-icon>
         提醒时间间隔设置（分钟）
-    </ion-label>
-    <!--  okText="确定" cancelText="取消"-->
-    <ion-select name="timeInterval" required [(ngModel)]="timeInterval" #priceUnit="ngModel" interface="popover" > 
+      </ion-label>
+      <!--  okText="确定" cancelText="取消"-->
+      <ion-select name="timeInterval" required [(ngModel)]="timeInterval" #priceUnit="ngModel" interface="popover">
         <!-- okText="Okay" cancelText="Dismiss" -->
         <ion-option value="1">1</ion-option>
         <ion-option value="15">15</ion-option>
         <ion-option value="30" selected="true">30</ion-option>
         <ion-option value="45">45</ion-option>
         <ion-option value="60">60</ion-option>
-    </ion-select>
-</ion-item>
+      </ion-select>
+    </ion-item>
 
-<ion-item>
-  <button ion-button block round color="secondary" tappable  (click)="save()"  >
-    <ion-icon name="checkbox"></ion-icon>
-    &nbsp;&nbsp;保存设置
-</button>
-</ion-item>
+    <div class="buttonContainer">
+      <button ion-button block round color="secondary" tappable (click)="save()">
+        <ion-icon name="checkbox"></ion-icon>
+        &nbsp;&nbsp;保存设置
+      </button>
+    </div>
 
-
+  </div>
 </ion-content>
