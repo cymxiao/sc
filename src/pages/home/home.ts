@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, Platform } from 'ionic-angular';
+import { NavController, NavParams, Platform } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
 
 import { BackgroundMode } from '@ionic-native/background-mode';
@@ -23,15 +23,17 @@ export class HomePage {
   seconds: number;
 
   timeInit: number = 0;
-  openTimes : number = 0;
+  openTimes: number = 0;
+  lockScreenOpened: boolean;
 
   isAndroidOff: string;
   constructor(public navCtrl: NavController,
+    private navParams: NavParams,
     private platform: Platform,
     private bgMode: BackgroundMode,
     private nativeAudio: NativeAudio,
     private media: Media) {
-    console.dir(this.platform);
+    //console.dir(this.platform);
     if (!this.bgMode.isEnabled()) {
       this.bgMode.enable();
 
@@ -42,13 +44,26 @@ export class HomePage {
     // if (!localStorage.getItem('seconds')) {
     //   localStorage.setItem('seconds', this.timeInit.toString());
     // }
-    platform.resume.subscribe( x=> {
+    platform.resume.subscribe(x => {
       this.openTimes = this.openTimes + 1;
     });
-    this.startTimer(); 
+    this.startTimer();
+
+
+    this.navCtrl.viewDidLoad.subscribe((vctrl) => {
+      if (vctrl && vctrl.data && vctrl.data.code && vctrl.data.code==='1234') {
+        this.lockScreenOpened = true;
+      }  
+    });
+
+    this.navCtrl.viewDidLeave.subscribe((vctrl) => {
+      if (vctrl && vctrl.data && vctrl.data.code && vctrl.data.code==='1234') {
+        this.lockScreenOpened = false;
+      }
+    });
   }
 
- 
+
 
   startTimer() {
     let startTime = new Date();
@@ -62,10 +77,10 @@ export class HomePage {
       //this.timeInit = this.timeInit + 1;  
       //timeElapsed is based on second
       const timeElapsed = Math.abs(timeDifference / 1000);
-    
+
       this.days = Math.floor(timeElapsed / (60 * 60 * 24));
       this.hours = Math.floor(timeElapsed / (60 * 60)) - 24 * this.days;
-      this.minutes = Math.floor(timeElapsed / 60)  - 24 * 60 * this.days  - 60 * this.hours;
+      this.minutes = Math.floor(timeElapsed / 60) - 24 * 60 * this.days - 60 * this.hours;
       this.seconds = Math.floor(timeElapsed) - 24 * 60 * 60 * this.days - (60 * 60 * this.hours) - (60 * this.minutes);
     });
   }
@@ -83,8 +98,6 @@ export class HomePage {
       this.showAlert = false;
       this.playSound();
       this.openLockscreen();
-      console.dir(this.platform);
-      //this.save();
     });
 
   }
@@ -99,7 +112,7 @@ export class HomePage {
 
     // to listen to plugin events:
 
-    if (file) { 
+    if (file) {
       // file.onSuccess.subscribe(() => {
       //   console.log('Action is successful'); 
       // });
@@ -112,7 +125,7 @@ export class HomePage {
       // release the native audio resource 
       // iOS simply create a new instance and the old one will be overwritten
       // Android you must call release() to destroy instances of media when you are done
-      if(this.platform.is('android')) {
+      if (this.platform.is('android')) {
         file.release();
       }
     }
@@ -127,18 +140,24 @@ export class HomePage {
   //   this.nativeAudio.play('uniqueId1');//.then(onSuccess, onError);
   // }
 
-  openLockscreen() { 
-    this.navCtrl.push(LockScreenComponent, {
-      code: '1234',
-      ACDelbuttons: false,
-      passcodeLabel: '请输入密码',
-      onCorrect: function () {
-        console.log('输入正确!');
-      },
-      onWrong: function (attemptNumber) {
-        console.log(attemptNumber + ' 错误密码输入次数(s)');
-      }
-    });
+  openLockscreen() {
+    //avoid open more than one lock screen
+    console.log(this.lockScreenOpened);
+    if (!this.lockScreenOpened) {
+      this.lockScreenOpened = true;
+      //this.modalCtrl.create(LockScreenComponent, {
+      this.navCtrl.push(LockScreenComponent, {
+        code: '1234',
+        ACDelbuttons: false,
+        passcodeLabel: '请输入密码',
+        onCorrect: function () {
+          console.log('输入正确!');
+        },
+        onWrong: function (attemptNumber) {
+          console.log(attemptNumber + ' 错误密码输入次数(s)');
+        }
+      });
+    }
   }
 
 }
