@@ -1,14 +1,15 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      戒手机
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <div>你已经使用手机  年  天 月 {{days}} 日 {{hours}} 时  {{minutes}} 分 {{seconds}} 秒 </div>
-  <div> {{isAndroidOff}}</div>
+  <div>你已经使用手机  {{days}} 日 {{hours}} 时  {{minutes}} 分 {{seconds}} 秒 </div>
+
+  <div> 累计使用次数：{{openTimes}}</div>
   <ion-item>
     <ion-label floating>
         <ion-icon name="timer" item-start class="text-primary"></ion-icon>

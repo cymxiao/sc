@@ -19,7 +19,7 @@ export class MyApp {
         splashScreen.hide();
       }, 500); 
 
-    });
+    }); 
   }
 }
 

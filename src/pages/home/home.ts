@@ -6,7 +6,6 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import { LockScreenComponent } from 'ionic-simple-lockscreen';
 import { Media, MediaObject } from '@ionic-native/media';
 import { NativeAudio } from '@ionic-native/native-audio';
-import { BoundElementPropertyAst } from '@angular/compiler';
 
 @Component({
   selector: 'page-home',
@@ -23,7 +22,8 @@ export class HomePage {
   minutes: number;
   seconds: number;
 
-  timeInit: number = 5;
+  timeInit: number = 0;
+  openTimes : number = 0;
 
   isAndroidOff: string;
   constructor(public navCtrl: NavController,
@@ -39,34 +39,16 @@ export class HomePage {
     if (!localStorage.getItem('startTime')) {
       localStorage.setItem('startTime', this.startTime.toString());
     }
-    if (!localStorage.getItem('seconds')) {
-      localStorage.setItem('seconds', this.timeInit.toString());
-    }
-    this.startTimer();
-    this.save_timer_to_local();
+    // if (!localStorage.getItem('seconds')) {
+    //   localStorage.setItem('seconds', this.timeInit.toString());
+    // }
+    platform.resume.subscribe( x=> {
+      this.openTimes = this.openTimes + 1;
+    });
+    this.startTimer(); 
   }
 
-
-  save_timer_to_local() {
-
-    if (this.platform && this.platform._platforms) {
-      let filter = this.platform._platforms.filter(x => { return x === 'android' });
-
-      if (filter && filter.length === 1) {
-        // this.bgMode.isScreenOff().then(isOff => {
-        //   localStorage.setItem('seconds', this.timeInit.toString());
-        //   this.bgMode.disable();
-        //   //this.isAndroidOff = isOff.toString() + 'haa';
-        //   // if (isOff) {
-
-        //   // } else {
-        //   //   //this.bgMode.enable();
-        //   //   this.isAndroidOff = isOff.toString() + 'haa';
-        //   // }
-        // });
-      }
-    }
-  }
+ 
 
   startTimer() {
     let startTime = new Date();
@@ -77,17 +59,14 @@ export class HomePage {
       const currentTime = new Date();
       const timeDifference = currentTime.getTime() - startTime.getTime();
 
-      this.timeInit = this.timeInit + 1;
-
-      //const timeElapsed = Math.abs(timeDifference / 1000);
-      const timeElapsed = Math.abs(this.timeInit * 1000 / 1000);
-      //console.log(timeElapsed);
-
-      //Convert seconds into minutes and seconds
+      //this.timeInit = this.timeInit + 1;  
+      //timeElapsed is based on second
+      const timeElapsed = Math.abs(timeDifference / 1000);
+    
       this.days = Math.floor(timeElapsed / (60 * 60 * 24));
       this.hours = Math.floor(timeElapsed / (60 * 60)) - 24 * this.days;
-      this.minutes = Math.floor(timeElapsed / 60) - 60 * this.hours;
-      this.seconds = Math.floor(timeElapsed) - (60 * 60 * this.hours) - (60 * this.minutes);
+      this.minutes = Math.floor(timeElapsed / 60)  - 24 * 60 * this.days  - 60 * this.hours;
+      this.seconds = Math.floor(timeElapsed) - 24 * 60 * 60 * this.days - (60 * 60 * this.hours) - (60 * this.minutes);
     });
   }
 
@@ -120,12 +99,9 @@ export class HomePage {
 
     // to listen to plugin events:
 
-    if (file) {
-      //file.onStatusUpdate.subscribe(status => console.log(status)); // fires when file status changes
-
+    if (file) { 
       // file.onSuccess.subscribe(() => {
-      //   console.log('Action is successful');
-      //   //this.save();
+      //   console.log('Action is successful'); 
       // });
 
       // file.onError.subscribe(error => console.log('Error!', error));
@@ -133,11 +109,12 @@ export class HomePage {
       // // play the file
       file.play();
 
-      // release the native audio resource
-      // Platform Quirks:
+      // release the native audio resource 
       // iOS simply create a new instance and the old one will be overwritten
       // Android you must call release() to destroy instances of media when you are done
-      //file.release();
+      if(this.platform.is('android')) {
+        file.release();
+      }
     }
 
   }
@@ -150,8 +127,7 @@ export class HomePage {
   //   this.nativeAudio.play('uniqueId1');//.then(onSuccess, onError);
   // }
 
-  openLockscreen() {
-    //console.log('log screen start...');
+  openLockscreen() { 
     this.navCtrl.push(LockScreenComponent, {
       code: '1234',
       ACDelbuttons: false,
