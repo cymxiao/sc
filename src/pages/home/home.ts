@@ -46,8 +46,20 @@ export class HomePage {
     // }
     platform.resume.subscribe(x => {
       this.openTimes = this.openTimes + 1;
+      //console.dir(this.platform); 
     });
     this.startTimer();
+
+    platform.pause.subscribe( () => {
+      console.log('platform pause...');
+       
+       console.log(this.bgMode.isEnabled);
+      this.bgMode.isScreenOff().then( () =>{
+        console.log('isScreenOff called');
+        }
+      );
+      //console.dirxml(this.platform);
+    });
 
 
     this.navCtrl.viewDidLoad.subscribe((vctrl) => {
@@ -63,7 +75,9 @@ export class HomePage {
     });
   }
 
-
+  disableBG(){
+    this.bgMode.disable();
+  }
 
   startTimer() {
     let startTime = new Date();
@@ -112,7 +126,7 @@ export class HomePage {
 
     // to listen to plugin events:
 
-    if (file) {
+    if (file && this.lockScreenOpened ) {
       // file.onSuccess.subscribe(() => {
       //   console.log('Action is successful'); 
       // });
@@ -125,9 +139,9 @@ export class HomePage {
       // release the native audio resource 
       // iOS simply create a new instance and the old one will be overwritten
       // Android you must call release() to destroy instances of media when you are done
-      if (this.platform.is('android')) {
-        file.release();
-      }
+      // if (this.platform.is('android')) {
+      //   file.release();
+      // }
     }
 
   }

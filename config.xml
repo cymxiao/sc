@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.cdtech.timer" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>戒手机</name>
     <description>一款防止长时间使用手机的软件.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
@@ -87,5 +87,6 @@
     <plugin name="cordova-plugin-nativeaudio" spec="~3.0.9" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-background-mode" spec="https://github.com/katzer/cordova-plugin-background-mode" />
     <engine name="ios" spec="~4.5.4" />
 </widget>
