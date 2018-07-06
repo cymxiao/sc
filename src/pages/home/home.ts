@@ -31,7 +31,7 @@ export class HomePage {
     private bgMode: BackgroundMode,
     private nativeAudio: NativeAudio,
     private media: Media) {
-    //console.dir(this.platform);
+    console.dir(this.platform);
     if (!this.bgMode.isEnabled()) {
       this.bgMode.enable();
 
@@ -47,23 +47,28 @@ export class HomePage {
   }
 
 
-  save_timer_to_local() { 
+  save_timer_to_local() {
 
-    if (this.platform && this.platform._platforms && this.platform._platforms[0] !== 'core') {
-      this.bgMode.isScreenOff().then(isOff => {
-        //this.isAndroidOff = isOff.toString() + 'haa';
-        if (isOff) {
-          localStorage.setItem('seconds', this.timeInit.toString());
-          this.bgMode.disable();
-        } else {
-          //this.bgMode.enable();
-          this.isAndroidOff = isOff.toString() + 'haa';
-        }
-      });
+    if (this.platform && this.platform._platforms) {
+      let filter = this.platform._platforms.filter(x => { return x === 'android' });
+
+      if (filter && filter.length === 1) {
+        // this.bgMode.isScreenOff().then(isOff => {
+        //   localStorage.setItem('seconds', this.timeInit.toString());
+        //   this.bgMode.disable();
+        //   //this.isAndroidOff = isOff.toString() + 'haa';
+        //   // if (isOff) {
+
+        //   // } else {
+        //   //   //this.bgMode.enable();
+        //   //   this.isAndroidOff = isOff.toString() + 'haa';
+        //   // }
+        // });
+      }
     }
   }
 
-  startTimer(){
+  startTimer() {
     let startTime = new Date();
     if (localStorage.getItem('startTime') != null) {
       startTime = new Date(localStorage.getItem('startTime'));
@@ -77,7 +82,7 @@ export class HomePage {
       //const timeElapsed = Math.abs(timeDifference / 1000);
       const timeElapsed = Math.abs(this.timeInit * 1000 / 1000);
       //console.log(timeElapsed);
-  
+
       //Convert seconds into minutes and seconds
       this.days = Math.floor(timeElapsed / (60 * 60 * 24));
       this.hours = Math.floor(timeElapsed / (60 * 60)) - 24 * this.days;
@@ -99,6 +104,7 @@ export class HomePage {
       this.showAlert = false;
       this.playSound();
       this.openLockscreen();
+      console.dir(this.platform);
       //this.save();
     });
 
@@ -117,12 +123,12 @@ export class HomePage {
     if (file) {
       //file.onStatusUpdate.subscribe(status => console.log(status)); // fires when file status changes
 
-      file.onSuccess.subscribe(() => {
-        console.log('Action is successful');
-        //this.save();
-      });
+      // file.onSuccess.subscribe(() => {
+      //   console.log('Action is successful');
+      //   //this.save();
+      // });
 
-      file.onError.subscribe(error => console.log('Error!', error));
+      // file.onError.subscribe(error => console.log('Error!', error));
 
       // // play the file
       file.play();
