@@ -27,6 +27,7 @@ export class HomePage {
   lockScreenOpened: boolean;
 
   isAndroidOff: string;
+  file : MediaObject; 
   constructor(public navCtrl: NavController,
     private navParams: NavParams,
     private platform: Platform,
@@ -75,9 +76,9 @@ export class HomePage {
     });
   }
 
-  disableBG(){
-    this.bgMode.disable();
-  }
+  // disableBG(){
+  //   this.bgMode.disable();
+  // }
 
   startTimer() {
     let startTime = new Date();
@@ -126,52 +127,42 @@ export class HomePage {
 
     // to listen to plugin events:
 
-    if (file && this.lockScreenOpened ) {
-      // file.onSuccess.subscribe(() => {
-      //   console.log('Action is successful'); 
-      // });
+    if (file)// && this.lockScreenOpened ) {
+      this.file = file;
+      file.play();  
 
-      // file.onError.subscribe(error => console.log('Error!', error));
+     
+    }
 
-      // // play the file
-      file.play();
-
-      // release the native audio resource 
-      // iOS simply create a new instance and the old one will be overwritten
-      // Android you must call release() to destroy instances of media when you are done
-      // if (this.platform.is('android')) {
-      //   file.release();
-      // }
+    openLockscreen() {
+      //avoid open more than one lock screen
+      console.log(this.lockScreenOpened);
+      if (!this.lockScreenOpened) {
+        this.lockScreenOpened = true;
+        //this.modalCtrl.create(LockScreenComponent, {
+        this.navCtrl.push(LockScreenComponent, {
+          code: '1234',
+          ACDelbuttons: false,
+          passcodeLabel: '请输入 1234 解锁',
+          onCorrect: function () {
+            if(this.file ){
+              console.log('stop file called.');
+              this.file.stop();
+            }
+            console.log('输入正确!');
+          },
+          onWrong: function (attemptNumber) {
+            console.log(attemptNumber + ' 错误密码输入次数(s)');
+          }
+        });
+      }
     }
 
   }
 
 
-  // playAudio() {
-  //   this.nativeAudio.preloadSimple('uniqueId1', 'assets/alarm.mp3');//.then(onSuccess, onError);
-  //   //this.nativeAudio.preloadComplex('uniqueId2', 'path/to/file2.mp3', 1, 1, 0).then(onSuccess, onError);
+  
 
-  //   this.nativeAudio.play('uniqueId1');//.then(onSuccess, onError);
-  // }
-
-  openLockscreen() {
-    //avoid open more than one lock screen
-    console.log(this.lockScreenOpened);
-    if (!this.lockScreenOpened) {
-      this.lockScreenOpened = true;
-      //this.modalCtrl.create(LockScreenComponent, {
-      this.navCtrl.push(LockScreenComponent, {
-        code: '1234',
-        ACDelbuttons: false,
-        passcodeLabel: '请输入 1234 解锁',
-        onCorrect: function () {
-          console.log('输入正确!');
-        },
-        onWrong: function (attemptNumber) {
-          console.log(attemptNumber + ' 错误密码输入次数(s)');
-        }
-      });
-    }
-  }
-
-}
+  
+ 
+ 

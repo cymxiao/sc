@@ -320,6 +320,7 @@ ion-navbar.no-border {
     }
 }
 
+
 // style for auth pages
 .auth-page {
     background-color: #fff;
@@ -339,9 +340,9 @@ ion-navbar.no-border {
         align-items: center;
         justify-content: center;
         //background: rgba(50, 10, 92, .4);
-        .login-content {
-            width: 86vw;
-            height: 85vh;
+        .login-page-content {
+            width: 92%;
+            height: 75%; //height should be defined, it is important 
             .logo {
                 width: 60px;
                 height: 60px;
@@ -377,7 +378,7 @@ ion-navbar.no-border {
 
 
 // style for auth pages
-.register-page {
+.auth-page {
     background-color: #fff;
     &::after {
         content: "";
@@ -390,16 +391,17 @@ ion-navbar.no-border {
         position: absolute;
         z-index: 0;
     }
-     .scroll-content {
+    .scroll-content {
         display: flex;
         align-items: center;
         justify-content: center;
-        
         //background: rgba(50, 10, 92, .4);
-        .login-content {
-            padding-top:100px;
-            width: 86%;
-         
+        .login-content { 
+            width: auto;
+            position:absolute;
+            top:10px;
+            left: 30px;
+            right: 30px; //right should be defined ,it's quite important 
             .logo {
                 width: 60px;
                 height: 60px;
@@ -432,6 +434,8 @@ ion-navbar.no-border {
         }
     }
 }
+
+ 
 // Menu user profile
 .user-profile {
     .user-avatar {
@@ -674,10 +678,19 @@ $segment-button-ios-text-color: #fff;
 .longText{
     white-space: normal;
 }
-
+.individualCenterDiv {
+    height: 10vh;
+    padding: 3vh;
+}
  //Amin:  Todo  Imp. Overwrite the css in ios device,   how to affect only privacy alert
 .alert-message {
     text-align: left !important;
 }
+
+.searchbar-md .searchbar-input{
+    font-size: 1.4rem;
+}
+
+
 
  
